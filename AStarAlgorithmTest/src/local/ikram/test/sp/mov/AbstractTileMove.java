@@ -14,8 +14,9 @@ import local.ikram.test.sp.tiles.ITile;
 public abstract class AbstractTileMove implements ITileMove {
 
     protected String moveType;
+    protected String reverseMove;
     protected ITile tile;
-    
+
     public AbstractTileMove(ITile tile) {
         this.tile = tile;
         init();
@@ -33,6 +34,16 @@ public abstract class AbstractTileMove implements ITileMove {
     @Override
     public void setMoveType(String moveType) {
         this.moveType = moveType;
+    }
+
+    @Override
+    public String getReverseMove() {
+        return reverseMove;
+    }
+
+    @Override
+    public void setReverseMove(String reverseMove) {
+        this.reverseMove = reverseMove;
     }
 
     @Override

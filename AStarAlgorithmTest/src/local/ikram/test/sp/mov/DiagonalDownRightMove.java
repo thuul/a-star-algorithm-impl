@@ -21,5 +21,6 @@ public class DiagonalDownRightMove extends AbstractTileMove {
 
     private void init() {
         setMoveType(AppConstants.DIAGONAL_DOWN_RIGHT);
+        setReverseMove(AppConstants.DIAGONAL_UP_LEFT);
     }
 }

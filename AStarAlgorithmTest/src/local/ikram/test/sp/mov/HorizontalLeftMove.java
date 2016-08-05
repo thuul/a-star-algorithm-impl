@@ -21,5 +21,6 @@ public class HorizontalLeftMove extends AbstractTileMove {
 
     private void init() {
         setMoveType(AppConstants.HORIZONTAL_LEFT);
+        setReverseMove(AppConstants.HORIZONTAL_RIGHT);
     }
 }

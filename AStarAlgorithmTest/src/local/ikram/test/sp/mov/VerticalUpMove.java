@@ -21,5 +21,6 @@ public class VerticalUpMove extends AbstractTileMove {
 
     private void init() {
         setMoveType(AppConstants.VERTICAL_UP);
+        setReverseMove(AppConstants.VERTICAL_DOWN);
     }
 }

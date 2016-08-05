@@ -27,6 +27,18 @@ public interface ITileMove {
 
     /**
      *
+     * @return String
+     */
+    public String getReverseMove();
+
+    /**
+     *
+     * @param reverseMove
+     */
+    public void setReverseMove(String reverseMove);
+
+    /**
+     *
      * @return ITile
      */
     ITile getTile();
