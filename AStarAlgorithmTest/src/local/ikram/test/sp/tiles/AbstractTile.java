@@ -6,6 +6,7 @@
 package local.ikram.test.sp.tiles;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import local.ikram.test.AppConstants;
@@ -50,38 +51,30 @@ public abstract class AbstractTile implements ITile {
         List<ITile> tileList = new ArrayList<>();
         TilePathGraph instance = TilePathGraph.getInstance();
 
-        ITile tileTocompare;
-        if ((tileTocompare = getDiagonalDownRightTile().getTile()).isWalkable()) {
-            tileList.add(tileTocompare);
+        tileList.add(getDiagonalDownRightTile().getTile());
+        tileList.add(getVerticalDownTile().getTile());
+        tileList.add(getHorizontalRightTile().getTile());
+        tileList.add(getVerticalUpTile().getTile());
+        tileList.add(getDiagonalDownLeftTile().getTile());
+        tileList.add(getHorizontalLeftTile().getTile());
+        tileList.add(getDiagonalUpLeftTile().getTile());
+        tileList.add(getDiagonalUpRightTile().getTile());
+
+        Iterator<ITile> iterator = tileList.iterator();
+        while (iterator.hasNext()) {
+            ITile next = iterator.next();
+            if (next == null || !next.isWalkable()) {
+                iterator.remove();
+            }
         }
-        if ((tileTocompare = getVerticalDownTile().getTile()).isWalkable()) {
-            tileList.add(tileTocompare);
-        }
-        if ((tileTocompare = getHorizontalRightTile().getTile()).isWalkable()) {
-            tileList.add(tileTocompare);
-        }
-        if ((tileTocompare = getDiagonalUpRightTile().getTile()).isWalkable()) {
-            tileList.add(tileTocompare);
-        }
-        if ((tileTocompare = getDiagonalDownLeftTile().getTile()).isWalkable()) {
-            tileList.add(tileTocompare);
-        }
-        if ((tileTocompare = getVerticalUpTile().getTile()).isWalkable()) {
-            tileList.add(tileTocompare);
-        }
-        if ((tileTocompare = getHorizontalLeftTile().getTile()).isWalkable()) {
-            tileList.add(tileTocompare);
-        }
-        if ((tileTocompare = getDiagonalUpLeftTile().getTile()).isWalkable()) {
-            tileList.add(tileTocompare);
-        }
-        tileList.sort((ITile o1, ITile o2) -> {
-            return o1.getScore().compareTo(o2.getScore());
-        });
 
         if (tileList.isEmpty()) {
             return null;
         }
+
+        tileList.sort((ITile o1, ITile o2) -> {
+            return o1.getScore().compareTo(o2.getScore());
+        });
 
         /**
          * provision for a loop structure that allows each object in the list to
@@ -116,7 +109,7 @@ public abstract class AbstractTile implements ITile {
             ITileMove innerTileMove = bestCostTile.getTileMove();
             instance.getPathTraversedMap().put(instance.getLastSingularMove(), innerTileMove);
 
-            outputFullHeutistic(tileList, bestCostTile);
+            outputFullHeuristics(tileList, bestCostTile);
 
             return innerTileMove;
         }
@@ -128,47 +121,25 @@ public abstract class AbstractTile implements ITile {
 
         List<ITile> tileList = new ArrayList<>();
 
-        ITile tileTocompare;
-        if (!tile.getTileMove().getMoveType().equals(AppConstants.DIAGONAL_UP_LEFT)) {
-            if ((tileTocompare = tile.getDiagonalDownRightTile().getTile()).isWalkable()) {
-                tileList.add(tileTocompare);
+        tileList.add(tile.getDiagonalDownRightTile().getTile());
+        tileList.add(tile.getVerticalDownTile().getTile());
+        tileList.add(tile.getHorizontalRightTile().getTile());
+        tileList.add(tile.getVerticalUpTile().getTile());
+        tileList.add(tile.getDiagonalDownLeftTile().getTile());
+        tileList.add(tile.getHorizontalLeftTile().getTile());
+        tileList.add(tile.getDiagonalUpLeftTile().getTile());
+        tileList.add(tile.getDiagonalUpRightTile().getTile());
+
+        Iterator<ITile> iterator = tileList.iterator();
+        while (iterator.hasNext()) {
+            ITile next = iterator.next();
+            if (tile.getTileMove().getReverseMove()
+                    .equals(next.getTileMove().getMoveType())
+                    || (!next.isWalkable())) {
+                iterator.remove();
             }
         }
-        if (!tile.getTileMove().getMoveType().equals(AppConstants.VERTICAL_UP)) {
-            if ((tileTocompare = tile.getVerticalDownTile().getTile()).isWalkable()) {
-                tileList.add(tileTocompare);
-            }
-        }
-        if (!tile.getTileMove().getMoveType().equals(AppConstants.HORIZONTAL_LEFT)) {
-            if ((tileTocompare = tile.getHorizontalRightTile().getTile()).isWalkable()) {
-                tileList.add(tileTocompare);
-            }
-        }
-        if (!tile.getTileMove().getMoveType().equals(AppConstants.DIAGONAL_DOWN_LEFT)) {
-            if ((tileTocompare = tile.getDiagonalUpRightTile().getTile()).isWalkable()) {
-                tileList.add(tileTocompare);
-            }
-        }
-        if (!tile.getTileMove().getMoveType().equals(AppConstants.DIAGONAL_UP_RIGHT)) {
-            if ((tileTocompare = tile.getDiagonalDownLeftTile().getTile()).isWalkable()) {
-                tileList.add(tileTocompare);
-            }
-        }
-        if (!tile.getTileMove().getMoveType().equals(AppConstants.VERTICAL_DOWN)) {
-            if ((tileTocompare = tile.getVerticalUpTile().getTile()).isWalkable()) {
-                tileList.add(tileTocompare);
-            }
-        }
-        if (!tile.getTileMove().getMoveType().equals(AppConstants.HORIZONTAL_RIGHT)) {
-            if ((tileTocompare = tile.getHorizontalLeftTile().getTile()).isWalkable()) {
-                tileList.add(tileTocompare);
-            }
-        }
-        if (!tile.getTileMove().getMoveType().equals(AppConstants.DIAGONAL_DOWN_RIGHT)) {
-            if ((tileTocompare = tile.getDiagonalUpLeftTile().getTile()).isWalkable()) {
-                tileList.add(tileTocompare);
-            }
-        }
+
         if (tileList.isEmpty()) {
             return true;
         }
@@ -309,7 +280,7 @@ public abstract class AbstractTile implements ITile {
     }
 
     @Override
-    public void outputFullHeutistic(List<ITile> tileList, ITile bestCostTile) {
+    public void outputFullHeuristics(List<ITile> tileList, ITile bestCostTile) {
         TilePathGraph instance = TilePathGraph.getInstance();
         instance.getTextArea().append("\n\n\n==========================================\n");
         instance.getTextArea().append("Path Heuristic evaluation\n\n");
